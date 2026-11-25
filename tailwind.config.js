@@ -7,9 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        hitamdov: "#26282B",
-        putihsusu: "#F4EEE0",
-        maroon: "#E03F4F",
+        hitamdov: "#131B2B",
+        abubiru: "#2F4A63",
+        biruabu: "#5B91A3",
+        cyanterang: "CFEAE0",
       },
     },
   },
