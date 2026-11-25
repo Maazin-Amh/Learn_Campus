@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CampusLink
 
-## Getting Started
+Next.js App Router dengan Firebase Authentication dan Firebase Realtime Database. Fitur mencakup login/daftar, chat real-time berdasarkan username unik, serta pencatatan mata kuliah per akun.
 
-First, run the development server:
+Setelah masuk, pengguna diarahkan ke `/dashboard` untuk mata kuliah, chat, dan link rapat Zoom. Pengaturan nama tampilan dan username ada di `/profile`. Link Zoom disimpan per mata kuliah; rapat dibuat dari Zoom lalu link undangannya ditempelkan di CampusLink.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Menyiapkan Firebase
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Aktifkan **Authentication → Email/Password**.
+2. Buat **Realtime Database** dan salin URL database.
+3. Isi `.env.local` berdasarkan `.env.example`.
+4. Publikasikan seluruh isi `database.rules.json` di **Realtime Database → Rules**.
+5. Jalankan `npm run dev` (port 3467).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Signup meminta username unik 3–20 karakter (huruf, angka, garis bawah). Username lama bisa diatur melalui tombol `+` pada bagian chat. Pencarian tidak memakai nomor telepon.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Mata kuliah disimpan pada `/courses/{uid}` dan hanya dapat dibaca atau diubah oleh pemilik akun.
 
-## Learn More
+## Route API
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `POST /api/auth` — daftar atau masuk Firebase.
+- `GET /api/chat?users=1` — daftar chat pengguna.
+- `GET /api/chat?peer=<uid>` — stream pesan real-time.
+- `POST /api/chat` — kirim pesan `{ peer, text }`.
+- `GET /api/contacts?username=<username>` — cari pengguna berdasarkan username.
+- `POST /api/contacts` — buat atau ubah username akun `{ username }`.
+- `GET /api/courses` — daftar mata kuliah pengguna.
+- `POST /api/courses` — tambah mata kuliah `{ name, code?, lecturer?, schedule? }`.
+- `DELETE /api/courses?id=<id>` — hapus mata kuliah.
+- `GET /api/profile` — baca profil akun.
+- `POST /api/profile` — ubah nama tampilan dan username `{ displayName, username }`.
